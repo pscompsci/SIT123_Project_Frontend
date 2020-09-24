@@ -37,6 +37,14 @@ func getData(url string) (data [][]string, err error) {
 	return data, nil
 }
 
+func saveData([][]string) {
+
+}
+
+func queueData([][]string) {
+
+}
+
 func pollForData(url string) {
 	for {
 		start := time.Now()
@@ -52,8 +60,16 @@ func pollForData(url string) {
 }
 
 func main() {
-	queue := NewDataQueue(100)
+	queue := NewFloatDataQueue(100)
 	queue.Enqueue(17.6)
+	queue.Enqueue(17.7)
+
+	slice := queue.AsSlice()
 
 	fmt.Println("Hello World")
+
+	for _, v := range slice {
+		fmt.Printf("%.1f ", v)
+	}
+	fmt.Println()
 }
