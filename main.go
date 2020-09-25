@@ -41,14 +41,15 @@ func saveData([][]string) {
 
 }
 
-func queueData([][]string) {
-
+func queueData(data [][]string, queue *DataQueue) {
+	for _, d := range data {
+		queue.Enqueue(d)
+	}
 }
 
-func pollForData(url string) {
+func pollForData(url string, queue *DataQueue) {
 	for {
 		start := time.Now()
-
 		data, err := getData(url)
 		if err != nil {
 			log.Printf("Error reading data from response: %v\n", err)
@@ -60,16 +61,17 @@ func pollForData(url string) {
 }
 
 func main() {
-	queue := NewFloatDataQueue(100)
-	queue.Enqueue(17.6)
-	queue.Enqueue(17.7)
+	queue := NewDataQueue(100)
+	queue.Enqueue([]string{"10001", "213456789", "2020/09/17 14:15:10", "46", "17.6", "760", "767", "1018"})
+	queue.Enqueue([]string{"20001", "213466789", "2020/09/17 14:15:20", "46", "17.6", "760", "767", "1018"})
 
-	slice := queue.AsSlice()
-
-	fmt.Println("Hello World")
-
-	for _, v := range slice {
-		fmt.Printf("%.1f ", v)
+	_, err := queue.Enqueue([]string{"20001", "213466789", "2020/09/17 14:15:20"})
+	if err != nil {
+		fmt.Println("Error correctly captured")
 	}
-	fmt.Println()
+
+	for e := queue.Queue.Front(); e != nil; e = e.Next() {
+		d := e.Value.(*DataRow)
+		fmt.Println(d.rowID)
+	}
 }
