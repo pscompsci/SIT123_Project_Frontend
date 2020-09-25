@@ -9,14 +9,14 @@ import (
 
 // DataRow repesents a row of data from a single measurement
 type DataRow struct {
-	rowID       int
-	stamp       int
-	timeStamp   time.Time
-	temperature float64
-	humidity    float64
-	moisture1   float64
-	moisture2   float64
-	light       float64
+	RowID       int
+	Stamp       int
+	TimeStamp   time.Time
+	Temperature float64
+	Humidity    float64
+	Moisture1   float64
+	Moisture2   float64
+	Light       float64
 }
 
 func convertTimeStamp(t string) time.Time {
@@ -43,13 +43,13 @@ func extractData(data []string) (*DataRow, error) {
 	if len(data) != reflect.TypeOf(DataRow{}).NumField() {
 		return &row, errors.New("data has incorrect structure")
 	}
-	row.rowID = convertInt(data[0])
-	row.stamp = convertInt(data[1])
-	row.timeStamp = convertTimeStamp(data[2])
-	row.temperature = convertFloat64(data[3])
-	row.humidity = convertFloat64(data[4])
-	row.moisture1 = convertFloat64(data[5])
-	row.moisture2 = convertFloat64(data[6])
-	row.light = convertFloat64(data[7])
+	row.RowID = convertInt(data[0])
+	row.Stamp = convertInt(data[1])
+	row.TimeStamp = convertTimeStamp(data[2])
+	row.Temperature = convertFloat64(data[3])
+	row.Humidity = convertFloat64(data[4])
+	row.Moisture1 = convertFloat64(data[5])
+	row.Moisture2 = convertFloat64(data[6])
+	row.Light = convertFloat64(data[7])
 	return &row, nil
 }

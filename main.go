@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -37,8 +38,20 @@ func getData(url string) (data [][]string, err error) {
 	return data, nil
 }
 
-func saveData([][]string) {
-
+func saveData(data [][]string, filename string) error {
+	file := filename + ".csv"
+	f, err := os.OpenFile(file, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Printf("failed to create or open %s\n", file)
+		return err
+	}
+	defer f.Close()
+	w := csv.NewWriter(f)
+	for _, d := range data {
+		w.Write(d)
+	}
+	w.Flush()
+	return nil
 }
 
 func queueData(data [][]string, queue *DataQueue) {
@@ -72,6 +85,15 @@ func main() {
 
 	for e := queue.Queue.Front(); e != nil; e = e.Next() {
 		d := e.Value.(*DataRow)
-		fmt.Println(d.rowID)
+		fmt.Println(d.RowID)
+	}
+
+	http.HandleFunc("/", handler(queue))
+
+	log.Println("Listening on :3000...")
+
+	err = http.ListenAndServe(":3000", nil)
+	if err != nil {
+		log.Fatal(err)
 	}
 }

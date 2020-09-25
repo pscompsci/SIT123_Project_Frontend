@@ -14,11 +14,11 @@ type DataQueue struct {
 
 // NewDataQueue returns a reference to a new DataQueue to hold
 // data readings
-func NewDataQueue(size int) *DataQueue {
+func NewDataQueue(size int) DataQueue {
 	queue := DataQueue{}
 	queue.MaxSize = size
 	queue.Queue = list.New()
-	return &queue
+	return queue
 }
 
 // Enqueue adds an element to the end of the DataQueue
